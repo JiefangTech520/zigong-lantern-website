@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语言切换测试</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        .lang-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: 2px solid #d4af37;
+            background: white;
+            cursor: pointer;
+        }
+        .lang-btn.active {
+            background: #d4af37;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>自贡彩灯官网</h1>
+
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="zh">中</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+    <h2 data-i18n="hero.title1">天下第一灯</h2>
+    <p data-i18n="hero.subtitle">自贡彩灯 · 南国灯城 · 匠心传承</p>
+
+    <div id="log" style="margin-top:20px; padding:10px; background:#f0f0f0;"></div>
+
+    <script>
+        const translations = {
+            zh: {
+                'hero.title1': '天下第一灯',
+                'hero.subtitle': '自贡彩灯 · 南国灯城 · 匠心传承'
+            },
+            en: {
+                'hero.title1': 'The Best Lantern in the World',
+                'hero.subtitle': 'Zigong Lanterns · Southern Lantern City · Inheritance with Craftsmanship'
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += '<div>' + msg + '</div>';
+            console.log(msg);
+        }
+
+        function changeLanguage(lang) {
+            log('changeLanguage called: ' + lang);
+            currentLang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = translations[currentLang][key];
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            log('DOM loaded');
+            log('Found lang buttons: ' + document.querySelectorAll('.lang-btn').length);
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                log('Adding click listener to: ' + lang);
+
+                btn.addEventListener('click', function() {
+                    log('Button clicked: ' + lang);
+                    changeLanguage(lang);
+                });
+            });
+
+            log('Language switcher initialized');
+        });
+    </script>
+</body>
+</html>
